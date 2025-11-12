@@ -23,6 +23,7 @@ const ffoRoutes = require('./routes/ffo.routes');
 const paymentRoutes = require('./routes/payments.routes');
 const bodiRoutes = require('./routes/bodi.routes');
 const appRoutes = require('./routes/app.routes');
+const documentsRoutes = require('./routes/documents.routes');
 
 async function init() {
   try {
@@ -35,6 +36,7 @@ async function init() {
     // Register routes
     app.use('/api/ffo', ffoRoutes);
     app.use('/api/payments', paymentRoutes);
+    app.use('/api/documents', documentsRoutes);
     app.use('/bodi', bodiRoutes);
     app.use('/api/app', appRoutes);
 

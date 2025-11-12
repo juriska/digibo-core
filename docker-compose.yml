@@ -1,6 +1,56 @@
 version: '3.8'
 
 services:
+  # API Service - runs in mock mode for local development
+  api-mock:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: digibo-api-mock
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - MOCK_ENABLED=true
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - digibo-network
+    profiles:
+      - mock
+
+  # API Service - connects to Oracle DB (local or remote)
+  api-db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: digibo-api-db
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3000
+      - MOCK_ENABLED=false
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - /app/node_modules
+    command: npm run dev
+    networks:
+      - digibo-network
+    profiles:
+      - db
+    depends_on:
+      - oracle
+
+  # Local Oracle XE Database (optional for local testing)
   oracle:
     image: container-registry.oracle.com/database/express:latest
     container_name: oracle-xe
@@ -11,8 +61,18 @@ services:
       - "1521:1521"
     volumes:
       - oracle-data:/opt/oracle/oradata
+      - ./oracle:/docker-entrypoint-initdb.d/scripts
     shm_size: '2gb'
     restart: unless-stopped
+    networks:
+      - digibo-network
+    profiles:
+      - db
+      - oracle-local
+
+networks:
+  digibo-network:
+    driver: bridge
 
 volumes:
   oracle-data: 

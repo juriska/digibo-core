@@ -5,7 +5,15 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "watch": "nodemon src/index.js --watch src --ext js,json,env"
+    "watch": "nodemon src/index.js --watch src --ext js,json,env",
+    "docker:mock": "docker-compose --profile mock up --build",
+    "docker:mock:down": "docker-compose --profile mock down",
+    "docker:db": "docker-compose --profile db up --build",
+    "docker:db:down": "docker-compose --profile db down",
+    "docker:oracle": "docker-compose --profile oracle-local up -d",
+    "docker:oracle:down": "docker-compose --profile oracle-local down -v",
+    "dev:mock": "cp .env.mock .env && npm run dev",
+    "dev:local-db": "cp .env.local-db .env && npm run dev"
   },
   "dependencies": {
     "cors": "^2.8.5",

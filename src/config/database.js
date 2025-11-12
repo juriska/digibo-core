@@ -1,18 +1,27 @@
 const oracledb = require('oracledb');
 require('dotenv').config();
 
-// Configure Oracle date handling
-oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
-oracledb.autoCommit = true;
-oracledb.fetchAsString = [oracledb.CLOB];
-oracledb.fetchAsBuffer = [oracledb.BLOB];
-oracledb.fetchInfo = {
-  DATE: { type: oracledb.STRING }
-};
+const mockEnabled = process.env.MOCK_ENABLED === 'true';
+
+if (!mockEnabled) {
+    // Configure Oracle date handling only when not in mock mode
+    oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+    oracledb.autoCommit = true;
+    oracledb.fetchAsString = [oracledb.CLOB];
+    oracledb.fetchAsBuffer = [oracledb.BLOB];
+    oracledb.fetchInfo = {
+        DATE: { type: oracledb.STRING }
+    };
+}
 
 let pool;
 
 const createPool = async () => {
+    if (mockEnabled) {
+        console.log('[MOCK MODE] Database connection pool skipped - using mock data');
+        return null;
+    }
+
     try {
         if (pool) {
             console.log('Pool already exists, reusing...');
@@ -46,6 +55,11 @@ const createPool = async () => {
 
 
 const getConnection = async () => {
+    if (mockEnabled) {
+        console.log('[MOCK MODE] Skipping database connection - using mock data');
+        return null;
+    }
+
     try {
         if (!pool) {
             console.log('Pool not found, creating new pool...');
@@ -62,6 +76,11 @@ const getConnection = async () => {
 
 
 const initializeDatabase = async () => {
+    if (mockEnabled) {
+        console.log('[MOCK MODE] Database initialization skipped - using mock data');
+        return;
+    }
+
     try {
         await createPool();
         console.log('Database connection initialized successfully');
