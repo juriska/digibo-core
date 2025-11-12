@@ -1,0 +1,123 @@
+CREATE OR REPLACE package IB.BOPayment as
+
+type cursor_t is ref cursor;
+
+function find(
+	-- remitter
+	custId in varchar2,
+	custName in varchar2,
+	userLogin in varchar2,
+	officerId in integer,
+
+	-- payment
+	benName in varchar2,
+	fromContract in varchar2,
+	fromLocation in varchar2,
+	pmtDetails in varchar2,
+	amountFrom in varchar2,
+	amountTill in varchar2,
+	currencies in varchar2,
+	pmtClass in out varchar2,
+	effectFrom in date,
+	effectTill in date,
+
+	-- system
+	paymentId in varchar2,
+	channels in varchar2,
+	statuses in varchar2,
+	createdFrom in date,
+	createdTill in date
+) return cursor_t;
+
+procedure payment(
+	pId in varchar2,
+	userName out varchar2,
+	userId out varchar2,
+	officerName out varchar2,
+    goldManager out varchar2,
+	custName out varchar2,
+	custAccount out varchar2,
+	benName out varchar2,
+	benId out varchar2,
+	benRes out varchar2,
+	benCity out varchar2,
+	benStreet out varchar2,
+	benAcnt out varchar2,
+	benType out varchar2,
+	ordName out varchar2,
+	ordId out varchar2,
+	ordRes out varchar2,
+	ordAcnt out varchar2,
+	benBankName out varchar2,
+	benBankBranch out varchar2,
+	benBankSwiftCode out varchar2,
+	benBankOtherCode out varchar2,
+	benBankAddr out varchar2,
+	imBankName out varchar2,
+	imBankAcnt out varchar2,
+	imBankSwiftCode out varchar2,
+	imBankOtherCode out varchar2,
+	imBankAddr out varchar2,
+	paymentDetails out varchar2,
+	itb out varchar2,
+	itc out varchar2,
+	epc out varchar2,
+	itd out varchar2,
+	exchangeRate out varchar2,
+	comType out varchar2,
+	typeId out integer,
+	eCheque out varchar2,
+	eExpiry out date,
+	signTime out date,
+	--signDevType out integer,
+	--signDevId out varchar2,
+	--signKey1 out varchar2,
+	--signKey2 out varchar2,
+	signRSA out varchar2,
+	templateName out varchar2,
+	pGlobusFt out varchar2,
+	pBookingDate out date,
+	pExecDate out date,
+	taxPayerId out varchar2,
+	isTaxDoc out integer,
+	isUtPayment out integer,
+	utTarifType out varchar2,
+	utTarifPrice out varchar2,
+	utTarifAmount out varchar2,
+	utOverAmount out varchar2,
+	utPenaltyType out varchar2,
+	utPenaltyDays out integer,
+	utPenaltyAmnt out varchar2,
+	utBookingDate out date,
+	utDateStart out date,
+	utDateEnd out date,
+	utVolumeStart out varchar2,
+	utVolumeEnd out varchar2,
+	utQuantity out varchar2,
+	utCorpCustCode out varchar2,
+	utCorpCustBranch out varchar2,
+	utBillNumber out varchar2,
+	utPhoneNumber out varchar2,
+	abonentCode out varchar2,
+	abonentName out varchar2,
+	abonentSurname out varchar2,
+	abonentAccount out varchar2,
+	abonentLegalId out varchar2,
+	pLocation out varchar2,
+	pSavingAccChargeId out integer,
+	pRejector out varchar2,
+	pRejectDate out date,
+	pChargesAccount out varchar2,
+	pSalaryPaymentDate out date,
+    sector out number,
+    segment out varchar2,
+    ben_mobile out varchar2
+);
+
+procedure change_template_group(
+    pId in varchar2,
+    pGroup in varchar2
+);
+
+end;
+/

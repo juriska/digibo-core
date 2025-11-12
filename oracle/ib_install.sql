@@ -1,0 +1,946 @@
+accept ib_instance_name char default (DESCRIPTION=(CONNECT_TIMEOUT=90)(TRANSPORT_CONNECT_TIMEOUT=3)(ADDRESS=(PROTOCOL=TCP)(HOST=gloria-scan.citadele.lv)(PORT=1521))(CONNECT_DATA=(FAILOVER_MODE=(TYPE=select)(METHOD=basic))(SERVER=dedicated)(SERVICE_NAME=IBXX_PRIMARY.citadele.lv))) prompt 'Enter target IB SID:'
+accept ib_owner_name char default ib prompt 'Enter IB owner name [IB]:'
+accept ib_owner_passwd char default ib prompt 'Enter IB owner password:' hide
+accept ib_sys_passwd char default test prompt 'Enter IB ''sys'' password:' hide
+
+prompt Connecting as sysdba user
+connect sys/&&ib_sys_passwd@&&ib_instance_name as sysdba;
+
+spool ibbo.log
+
+prompt
+prompt Patch for IB instance ...
+prompt
+
+--@alter0NN.sql
+@ib_roles.sql
+
+grant connect to RBOHELPDESK;
+grant connect to RBOFAXVIEW;
+grant connect to RBOFAXASSISTANT;
+grant connect to RBOFAXMANAGER;
+grant connect to RBOMAINTENANCE;
+grant connect to RBORATES;
+grant connect to RBOSYSADMIN;
+grant connect to RBOOFFICER;
+grant connect to RBOCUSTOMER;
+grant connect to RBOPAYMENTVIEW;
+grant connect to RBOORDERS;
+grant connect to RBONOTE;
+grant connect to RBOAUDITLOG;
+grant connect to RBOMessages;
+grant connect to RBOStandingOrders;
+grant connect to RBODDOrders;
+grant connect to RBODepositOrders;
+grant connect to RBOCQVIEW;
+grant connect to RBOMortgLoanOrdersView;
+-- grant connect to RBOVSAAAPPLICATIONS;
+-- grant connect to RBOVSAAADVICES;
+-- grant connect to RBOVSAAADVICEAPPLICATIONS;
+grant connect to RBOConfRiskUndertaken;
+grant connect to RBOOTSESIGN;
+grant connect to RBOOTSEAPPROVE;
+grant connect to RBOMessageAttachments;
+grant connect to RBODEPOVIEW;
+grant connect to RBOCUSTODYVIEW;
+grant connect to RBOACCADMINVIEW;
+grant connect to RBOPRODKITVIEW;
+grant connect to RBOAMEXORDERVIEW;
+grant connect to RBO_CREDIT_LIMIT_INCREASE_VIEW;
+grant connect to RBO_CAPF_VIEW;
+grant connect to RBO_CRONTO_PRINT;
+grant connect to RBO_LIFEANDPENSION_VIEW;
+grant connect to RBO_PENSION_AGR_VIEW;
+grant connect to RBO_MOBILESCAN_DOC_VIEW;
+grant connect to RBO_FI_BO_VIEW;
+grant connect to RBO_OFFICER_PHOTO;
+grant connect to RBO_LEASE_APPLIC_VIEW;
+grant connect to RBO_FINANCE_CONSULTATION_EDIT;
+grant connect to RBO_DIGITAL_ONB_VIEW;
+grant connect to RBO_XSMART_BONUS_VIEW;
+grant connect to RBO_BANNERS;
+grant connect to RBO_SKY_BRANCH;
+grant connect to RBO_PRIVATE_UNIT;
+grant connect to RBO_BRANCH_BUSINESS_UNIT;
+grant connect to RBO_SME;
+grant connect to RBO_MORTGAGE;
+grant connect to RBO_PRIVATE_BANKING;
+grant connect to RBO_IT_ADMIN;
+grant connect to RBO_AML_AND_CARD_RISK_MNGMT;
+grant connect to RBO_BANNER_MANAGEMENT;
+grant connect to RBO_BKU_EXPERT;
+grant connect to RBO_CARD_OPS_SPECIALIST;
+grant connect to RBO_COMPLIANCE_OFFICER;
+grant connect to RBO_LENDING_OPS;
+grant connect to RBO_CYBERSECURITY;
+grant connect to RBO_FI_EXPERT;
+grant connect to RBO_FM_BROKER;
+grant connect to RBO_FLEX_WORK_EMPLOYEE;
+grant connect to RBO_IT_USERS_SUPPORT;
+grant connect to RBO_LENDING_PRODUCTS_DEV;
+grant connect to RBO_MIDDLE_OFFICE_SPECIALIST;
+grant connect to RBO_OPERATIONS_EXPERT;
+grant connect to RBO_PAYMENTS_OPS;
+grant connect to RBO_DIG_CHANNELS_PROD_OWNER;
+grant connect to RBO_STATE_AUTH_REQ_PROCESSING;
+
+
+
+
+
+GRANT GRANT ANY ROLE TO RBOSYSADMIN WITH ADMIN OPTION;
+GRANT ALTER USER TO RBOSYSADMIN WITH ADMIN OPTION;
+GRANT CREATE USER TO RBOSYSADMIN WITH ADMIN OPTION;
+GRANT ALTER USER TO RBOOFFICERPASSWORD;
+
+grant RBOCustomer to RBOCustomerEdit;
+grant RBOSMSAgreementView to RBOSMSAgreementEdit;
+grant RBOSMSAgreementEdit to RBOTeller;
+grant RBOSMSMSGView to RBOTeller;
+grant RBOSMSMSGView to RBOMessages;
+grant RBOCustomer to RBOTeller;
+grant RBOCustomerEdit to RBOInputer;
+grant RBOHELPDESK to RBOInputer;
+grant RBOCustomerEdit to RBOCardOfficer;
+grant RBOFaxView to RBOFaxReg;
+grant RBOFaxView to RBOFaxManager;
+grant RBOFaxPayment to RBOTeller;
+grant RBOFaxFFO to RBOTeller;
+grant RBOFaxKRD to RBOFaxManager;
+grant RBOFaxKRD to RBOFaxAssistant;
+grant RBOOFFICERREPLACE to RBOAdmin;
+grant RBONote to RBOAdmin;
+grant RBOPayment to RBOTeller;
+grant RBOPayment to RBOTemplates;
+grant RBOTemplates to RBOTemplatesEdit;
+grant RBOTemplatesEdit to RBOAdmin;
+grant RBOOrders to RBOFFOrders;
+grant RBOOrders to RBOCardOrders;
+grant RBOOrders to RBOTeller;
+grant RBOFFOrders to RBOTeller;
+grant RBOCardOrders to RBOCardOfficer;
+grant RBOStandingOrders to RBOTeller;
+grant RBODDOrders to RBOTeller;
+grant RBODepositOrders to RBOTeller;
+grant RBOAuditLog to RBOAdmin;
+grant RBOAuditLog to RBOMaintenance;
+grant RBO_DIGITAL_ONB_VIEW to RBO_DIGITAL_ONB_EDIT;
+
+grant RBOMessages to RBOTeller;
+grant RBOMessages to RBOPAM;
+grant RBOMessages to RBOBroker;
+grant RBOMessages to RBODealer;
+grant RBOMessages to RBOLife;
+grant RBOMessages to RBOMortgLoanOrdersView;
+grant RBOMessages to RBOMarginOrdersView;
+grant RBOMessages to RBO_LEASE_APPLIC_VIEW;
+
+grant RBOOfficerDistributor to RBOAdmin;
+grant RBOCustomerEdit to RBOOfficerDistributor;
+grant RBOPAMOrdersView to RBOPAM;
+grant RBOPAMOrdersEdit to RBOPAM;
+grant RBOSecOrdersView to RBOBroker;
+grant RBOSecOrdersEdit to RBOBroker;
+grant RBOMarginOrdersView to RBODealer;
+grant RBOMarginOrdersEdit to RBODealer;
+grant RBOCQView to RBOCQEdit;
+grant RBOCQEdit to RBOTeller;
+grant RBOMortgLoanOrdersView to RBOMortgLoanOrdersEdit;
+grant RBOMORTGLOANORDERSEDIT to RBOMORTGLOANS;
+--grant RBOMortgLoanOrdersEdit to RBOTeller;
+grant RBOACCADMINEDIT to RBOTeller;
+
+-- grant RBOVSAAApplications to RBOVSAA;
+-- grant RBOVSAAADVICES to RBOVSAA;
+-- grant RBOVSAAADVICEAPPLICATIONS to RBOVSAA;
+
+grant RBOOFFICER to RBOOFFICEREDIT;
+grant RBOOFFICER to RBOSYSADMIN;
+grant RBOOFFICER to RBOOFFICERREPLACE;
+grant RBOOFFICER to RBOOFFICERPASSWORD;
+
+grant RBOOFFICEREDIT to RBOSYSADMIN;
+
+grant RBODEPOVIEW to RBODEPOEDIT;
+
+grant RBOCUSTODYVIEW to RBOCUSTODYEDIT;
+
+grant RBOACCADMINVIEW to RBOACCADMINEDIT;
+grant RBOPRODKITVIEW to RBOPRODKITEDIT;
+grant RBOAMEXORDERVIEW to RBOAMEXORDEREDIT;
+
+--grant RBOMessageAttachments to RBOPAM;
+--grant RBOMessageAttachments to RBODealer;
+--grant RBOMessageAttachments to RBOBroker;
+
+grant RBOPERSONALOFFICER to RBOTELLER;
+
+grant RBOPERSONALOFFICER to RBO_KLAC_TELEMARKETING;
+grant RBOCUSTOMER to RBO_KLAC_TELEMARKETING;
+grant RBOSMSMSGVIEW to RBO_KLAC_TELEMARKETING;
+grant RBOORDERS to RBO_KLAC_TELEMARKETING;
+grant RBOFFORDERS to RBO_KLAC_TELEMARKETING;
+grant RBOMESSAGES to RBO_KLAC_TELEMARKETING;
+grant RBOHELPDESK to RBO_KLAC_TELEMARKETING;
+grant RBOMORTGLOANORDERSEDIT to RBO_KLAC_TELEMARKETING;
+grant RBOACCADMINEDIT to RBO_KLAC_TELEMARKETING;
+grant RBOPRODKITEDIT to RBO_KLAC_TELEMARKETING;
+grant RBOAMEXORDEREDIT to RBO_KLAC_TELEMARKETING;
+grant RBOPAYMENTVIEW to RBO_KLAC_TELEMARKETING;
+grant RBO_CREDIT_LIMIT_INCREASE_EDIT to RBO_KLAC_TELEMARKETING;
+grant RBOSTANDINGORDERS to RBO_KLAC_TELEMARKETING;
+grant RBODDORDERS to RBO_KLAC_TELEMARKETING;
+grant RBOCUSTOMEREDIT to RBO_KLAC_TELEMARKETING;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_KLAC_TELEMARKETING;
+grant RBO_LIFEANDPENSION_VIEW to RBO_KLAC_TELEMARKETING;
+grant RBO_PENSION_AGR_VIEW to RBO_KLAC_TELEMARKETING;
+--grant RBOVSAA to RBO_KLAC_TELEMARKETING;
+grant RBO_XSMART_BONUS_EDIT to RBO_KLAC_TELEMARKETING;
+
+grant RBOPERSONALOFFICER to RBO_KLAC_IBSERVICE;
+grant RBOFAXPAYMENT to RBO_KLAC_IBSERVICE;
+grant RBOFAXFFO to RBO_KLAC_IBSERVICE;
+grant RBOORDERS to RBO_KLAC_IBSERVICE;
+grant RBOPAYMENT to RBO_KLAC_IBSERVICE;
+grant RBOFFORDERS to RBO_KLAC_IBSERVICE;
+grant RBOSTANDINGORDERS to RBO_KLAC_IBSERVICE;
+grant RBODDORDERS to RBO_KLAC_IBSERVICE;
+grant RBODEPOSITORDERS to RBO_KLAC_IBSERVICE;
+grant RBOMESSAGES to RBO_KLAC_IBSERVICE;
+grant RBOCUSTOMER to RBO_KLAC_IBSERVICE;
+grant RBOSMSAGREEMENTEDIT to RBO_KLAC_IBSERVICE;
+grant RBOSMSMSGVIEW to RBO_KLAC_IBSERVICE;
+grant RBOACCADMINEDIT to RBO_KLAC_IBSERVICE;
+grant RBOCQEDIT to RBO_KLAC_IBSERVICE;
+grant RBOHELPDESK to RBO_KLAC_IBSERVICE;
+grant RBOMORTGLOANORDERSEDIT to RBO_KLAC_IBSERVICE;
+grant RBOACCADMINEDIT to RBO_KLAC_IBSERVICE;
+grant RBOPRODKITEDIT to RBO_KLAC_IBSERVICE;
+grant RBOAMEXORDEREDIT to RBO_KLAC_IBSERVICE;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_KLAC_IBSERVICE;
+grant RBO_LIFEANDPENSION_VIEW to RBO_KLAC_IBSERVICE;
+grant RBO_PENSION_AGR_VIEW to RBO_KLAC_IBSERVICE;
+--grant RBOVSAA to RBO_KLAC_IBSERVICE;
+grant RBO_XSMART_BONUS_EDIT to RBO_KLAC_IBSERVICE;
+
+grant RBO_CAPF_VIEW to RBO_CAPF_EDIT;
+grant RBO_LIFEANDPENSION_VIEW to RBO_LIFEANDPENSION_EDIT;
+grant RBO_PENSION_AGR_VIEW to RBO_PENSION_AGR_EDIT;
+
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_CREDIT_LIMIT_INCREASE_EDIT;
+grant RBOPAYMENTVIEW to RBOPAYMENT;
+grant RBO_FI_BO_VIEW to RBO_FI_BO_EDIT;
+
+grant RBO_OFFICER_PHOTO to RBOOfficer;
+
+grant RBO_LEASE_APPLIC_VIEW to RBO_LEASE_APPLIC_EDIT;
+
+grant RBO_XSMART_BONUS_VIEW to RBO_XSMART_BONUS_EDIT;
+
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_INSURANCE_ORDERS_EDIT;
+
+
+-- MACRO ROLES
+	-- RBO_SKY_BRANCH
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_SKY_BRANCH;
+grant RBO_DIGITAL_ONB_VIEW to RBO_SKY_BRANCH;
+grant RBO_LIFEANDPENSION_VIEW to RBO_SKY_BRANCH;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_SKY_BRANCH;
+grant RBO_PENSION_AGR_VIEW to RBO_SKY_BRANCH;
+grant RBOACCADMINEDIT to RBO_SKY_BRANCH;
+grant RBOACCADMINVIEW to RBO_SKY_BRANCH;
+grant RBOAMEXORDERVIEW to RBO_SKY_BRANCH;
+grant RBOAUDITLOG to RBO_SKY_BRANCH;
+grant RBOCARDORDERS to RBO_SKY_BRANCH;
+grant RBOCQEDIT to RBO_SKY_BRANCH;
+grant RBOCQVIEW to RBO_SKY_BRANCH;
+grant RBOCUSTOMER to RBO_SKY_BRANCH;
+grant RBOCUSTOMEREDIT to RBO_SKY_BRANCH;
+grant RBODDORDERS to RBO_SKY_BRANCH;
+grant RBODEPOSITORDERS to RBO_SKY_BRANCH;
+grant RBOFFORDERS to RBO_SKY_BRANCH;
+grant RBOORDERS to RBO_SKY_BRANCH;
+grant RBOHELPDESK to RBO_SKY_BRANCH;
+grant RBOMAINTENANCE to RBO_SKY_BRANCH;
+grant RBOMESSAGEATTACHMENTS to RBO_SKY_BRANCH;
+grant RBOMESSAGES to RBO_SKY_BRANCH;
+grant RBOMORTGLOANORDERSVIEW to RBO_SKY_BRANCH;
+grant RBOPAYMENT to RBO_SKY_BRANCH;
+grant RBOPAYMENTVIEW to RBO_SKY_BRANCH;
+grant RBOPERSONALOFFICER to RBO_SKY_BRANCH;
+grant RBOSMSAGREEMENTEDIT to RBO_SKY_BRANCH;
+grant RBOSMSAGREEMENTVIEW to RBO_SKY_BRANCH;
+grant RBOSMSMSGVIEW to RBO_SKY_BRANCH;
+grant RBOSTANDINGORDERS to RBO_SKY_BRANCH;
+grant RBOTELLER to RBO_SKY_BRANCH;
+grant RBO_INSURANCE_ORDERS_EDIT to RBO_SKY_BRANCH;
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_SKY_BRANCH;
+
+	-- RBO_PRIVATE_UNIT
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_PRIVATE_UNIT;
+grant RBO_DIGITAL_ONB_EDIT to RBO_PRIVATE_UNIT;
+grant RBO_DIGITAL_ONB_VIEW to RBO_PRIVATE_UNIT;
+grant RBO_LIFEANDPENSION_VIEW to RBO_PRIVATE_UNIT;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_PRIVATE_UNIT;
+grant RBO_PENSION_AGR_VIEW to RBO_PRIVATE_UNIT;
+grant RBOACCADMINEDIT to RBO_PRIVATE_UNIT;
+grant RBOACCADMINVIEW to RBO_PRIVATE_UNIT;
+grant RBOAMEXORDERVIEW to RBO_PRIVATE_UNIT;
+grant RBOAUDITLOG to RBO_PRIVATE_UNIT;
+grant RBOCARDORDERS to RBO_PRIVATE_UNIT;
+grant RBOCQEDIT to RBO_PRIVATE_UNIT;
+grant RBOCQVIEW to RBO_PRIVATE_UNIT;
+grant RBOCUSTOMER to RBO_PRIVATE_UNIT;
+grant RBOCUSTOMEREDIT to RBO_PRIVATE_UNIT;
+grant RBODDORDERS to RBO_PRIVATE_UNIT;
+grant RBODEPOSITORDERS to RBO_PRIVATE_UNIT;
+grant RBOFFORDERS to RBO_PRIVATE_UNIT;
+grant RBOORDERS to RBO_PRIVATE_UNIT;
+grant RBOHELPDESK to RBO_PRIVATE_UNIT;
+grant RBOMAINTENANCE to RBO_PRIVATE_UNIT;
+grant RBOMESSAGEATTACHMENTS to RBO_PRIVATE_UNIT;
+grant RBOMESSAGES to RBO_PRIVATE_UNIT;
+grant RBOMORTGLOANORDERSEDIT to RBO_PRIVATE_UNIT;
+grant RBOMORTGLOANORDERSVIEW to RBO_PRIVATE_UNIT;
+grant RBOMORTGLOANS to RBO_PRIVATE_UNIT;
+grant RBOPAYMENT to RBO_PRIVATE_UNIT;
+grant RBOPAYMENTVIEW to RBO_PRIVATE_UNIT;
+grant RBOPERSONALOFFICER to RBO_PRIVATE_UNIT;
+grant RBOSMSAGREEMENTEDIT to RBO_PRIVATE_UNIT;
+grant RBOSMSAGREEMENTVIEW to RBO_PRIVATE_UNIT;
+grant RBOSMSMSGVIEW to RBO_PRIVATE_UNIT;
+grant RBOSTANDINGORDERS to RBO_PRIVATE_UNIT;
+grant RBOTELLER to RBO_PRIVATE_UNIT;
+grant RBO_CHANGE_DOCUMENT_STATUS to RBO_PRIVATE_UNIT;
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_PRIVATE_UNIT;
+
+	-- RBO_BRANCH_BUSINESS_UNIT
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBO_DIGITAL_ONB_VIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBO_LIFEANDPENSION_VIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBO_PENSION_AGR_VIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOACCADMINVIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOAMEXORDERVIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOAUDITLOG to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOCQVIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOCUSTOMER to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOCUSTOMEREDIT to RBO_BRANCH_BUSINESS_UNIT;
+grant RBODDORDERS to RBO_BRANCH_BUSINESS_UNIT;
+grant RBODEPOSITORDERS to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOFFORDERS to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOORDERS to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOHELPDESK to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOMAINTENANCE to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOMORTGLOANORDERSVIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOPAYMENTVIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOPERSONALOFFICER to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOSMSAGREEMENTVIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOSMSMSGVIEW to RBO_BRANCH_BUSINESS_UNIT;
+grant RBOSTANDINGORDERS to RBO_BRANCH_BUSINESS_UNIT;
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_BRANCH_BUSINESS_UNIT;
+
+		-- RBO_SME
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_SME;
+grant RBO_DIGITAL_ONB_VIEW to RBO_SME;
+grant RBO_LIFEANDPENSION_VIEW to RBO_SME;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_SME;
+grant RBO_PENSION_AGR_VIEW to RBO_SME;
+grant RBOACCADMINVIEW to RBO_SME;
+grant RBOAMEXORDERVIEW to RBO_SME;
+grant RBOAUDITLOG to RBO_SME;
+grant RBOCQVIEW to RBO_SME;
+grant RBOCUSTOMER to RBO_SME;
+grant RBOCUSTOMEREDIT to RBO_SME;
+grant RBODDORDERS to RBO_SME;
+grant RBODEPOSITORDERS to RBO_SME;
+grant RBOFFORDERS to RBO_SME;
+grant RBOORDERS to RBO_SME;
+grant RBOHELPDESK to RBO_SME;
+grant RBOMAINTENANCE to RBO_SME;
+grant RBOMORTGLOANORDERSVIEW to RBO_SME;
+grant RBOPAYMENTVIEW to RBO_SME;
+grant RBOPERSONALOFFICER to RBO_SME;
+grant RBOSMSAGREEMENTVIEW to RBO_SME;
+grant RBOSMSMSGVIEW to RBO_SME;
+grant RBOSTANDINGORDERS to RBO_SME;
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_SME;
+
+			-- RBO_MORTGAGE
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_MORTGAGE;
+grant RBO_DIGITAL_ONB_VIEW to RBO_MORTGAGE;
+grant RBO_LIFEANDPENSION_VIEW to RBO_MORTGAGE;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_MORTGAGE;
+grant RBO_PENSION_AGR_VIEW to RBO_MORTGAGE;
+grant RBOACCADMINVIEW to RBO_MORTGAGE;
+grant RBOAMEXORDERVIEW to RBO_MORTGAGE;
+grant RBOAUDITLOG to RBO_MORTGAGE;
+grant RBOCQVIEW to RBO_MORTGAGE;
+grant RBOCUSTOMER to RBO_MORTGAGE;
+grant RBOCUSTOMEREDIT to RBO_MORTGAGE;
+grant RBODDORDERS to RBO_MORTGAGE;
+grant RBODEPOSITORDERS to RBO_MORTGAGE;
+grant RBOFFORDERS to RBO_MORTGAGE;
+grant RBOORDERS to RBO_MORTGAGE;
+grant RBOHELPDESK to RBO_MORTGAGE;
+grant RBOMESSAGEATTACHMENTS to RBO_MORTGAGE;
+grant RBOMORTGLOANORDERSVIEW to RBO_MORTGAGE;
+grant RBOMORTGLOANS to RBO_MORTGAGE;
+grant RBOPAYMENTVIEW to RBO_MORTGAGE;
+grant RBOPERSONALOFFICER to RBO_MORTGAGE;
+grant RBOSMSAGREEMENTVIEW to RBO_MORTGAGE;
+grant RBOSMSMSGVIEW to RBO_MORTGAGE;
+grant RBOSTANDINGORDERS to RBO_MORTGAGE;		
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_MORTGAGE;		
+
+	-- RBO_PRIVATE_BANKING
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_PRIVATE_BANKING;
+grant RBO_DIGITAL_ONB_VIEW to RBO_PRIVATE_BANKING;
+grant RBO_LIFEANDPENSION_VIEW to RBO_PRIVATE_BANKING;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_PRIVATE_BANKING;
+grant RBO_PENSION_AGR_VIEW to RBO_PRIVATE_BANKING;
+grant RBOACCADMINVIEW to RBO_PRIVATE_BANKING;
+grant RBOAMEXORDERVIEW to RBO_PRIVATE_BANKING;
+grant RBOAUDITLOG to RBO_PRIVATE_BANKING;
+grant RBOCQVIEW to RBO_PRIVATE_BANKING;
+grant RBOCUSTOMER to RBO_PRIVATE_BANKING;
+grant RBOCUSTOMEREDIT to RBO_PRIVATE_BANKING;
+grant RBODDORDERS to RBO_PRIVATE_BANKING;
+grant RBODEPOSITORDERS to RBO_PRIVATE_BANKING;
+grant RBOFFORDERS to RBO_PRIVATE_BANKING;
+grant RBOORDERS to RBO_PRIVATE_BANKING;
+grant RBOHELPDESK to RBO_PRIVATE_BANKING;
+grant RBOMAINTENANCE to RBO_PRIVATE_BANKING;
+grant RBOMESSAGEATTACHMENTS to RBO_PRIVATE_BANKING;
+grant RBOMESSAGES to RBO_PRIVATE_BANKING;
+grant RBOMORTGLOANORDERSVIEW to RBO_PRIVATE_BANKING;
+grant RBOPAYMENTVIEW to RBO_PRIVATE_BANKING;
+grant RBOPERSONALOFFICER to RBO_PRIVATE_BANKING;
+grant RBOSMSAGREEMENTVIEW to RBO_PRIVATE_BANKING;
+grant RBOSMSMSGVIEW to RBO_PRIVATE_BANKING;
+grant RBOSTANDINGORDERS to RBO_PRIVATE_BANKING;
+grant RBOTELLER to RBO_PRIVATE_BANKING;	
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_PRIVATE_BANKING;	
+	-- RBO_IT_ADMIN
+grant RBOADMIN to RBO_IT_ADMIN;
+grant RBOINPUTER to RBO_IT_ADMIN;
+grant RBO_KLAC_TELEMARKETING to RBO_IT_ADMIN;
+grant RBOPERSONALOFFICER to RBO_IT_ADMIN;
+grant RBO_GATEWAY_MANAGER to RBO_IT_ADMIN;
+grant RBOHELPDESK to RBO_IT_ADMIN;
+grant RBOMAINTENANCE to RBO_IT_ADMIN;
+grant RBO_CRONTO_PRINT to RBO_IT_ADMIN;
+grant RBOPAM to RBO_IT_ADMIN;
+grant RBODEALER to RBO_IT_ADMIN;
+grant RBOBROKER to RBO_IT_ADMIN;
+grant RBOMORTGLOANS to RBO_IT_ADMIN;
+grant RBOFAXMANAGER to RBO_IT_ADMIN;
+grant RBOFAXASSISTANT to RBO_IT_ADMIN;
+grant RBOLIFE to RBO_IT_ADMIN;
+grant RBO_FINANCE_CONSULTATION_EDIT to RBO_IT_ADMIN;
+grant RBO_DIGITAL_ONB_EDIT to RBO_IT_ADMIN;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_IT_ADMIN;
+grant RBOMESSAGEATTACHMENTS to RBO_IT_ADMIN;
+grant RBOUSERMANUALMIGRATION to RBO_IT_ADMIN;
+grant RBOCUSTODYEDIT to RBO_IT_ADMIN;
+grant RBO_FI_BO_EDIT to RBO_IT_ADMIN;
+grant RBOACCADMINEDIT to RBO_IT_ADMIN;
+grant RBOPRODKITEDIT to RBO_IT_ADMIN;
+grant RBOAMEXORDEREDIT to RBO_IT_ADMIN;
+grant RBOMORTGLOANORDERSEDIT to RBO_IT_ADMIN;
+grant RBOCONFRISKUNDERTAKEN to RBO_IT_ADMIN;
+grant RBO_CREDIT_LIMIT_INCREASE_EDIT to RBO_IT_ADMIN;
+grant RBO_CAPF_EDIT to RBO_IT_ADMIN;
+grant RBO_LIFEANDPENSION_EDIT to RBO_IT_ADMIN;
+grant RBO_PENSION_AGR_EDIT to RBO_IT_ADMIN;
+grant RBOOTSESIGN to RBO_IT_ADMIN;
+grant RBOOTSEAPPROVE to RBO_IT_ADMIN;
+grant RBO_XSMART_BONUS_EDIT to RBO_IT_ADMIN;
+grant RBOOFFICER to RBO_IT_ADMIN;
+grant RBOSYSADMIN to RBO_IT_ADMIN;
+grant RBOOFFICERPASSWORD to RBO_IT_ADMIN;
+grant RBO_OFFICER_PHOTO to RBO_IT_ADMIN;
+grant RBO_BANNERS to RBO_IT_ADMIN;
+grant RBO_CHANGE_DOCUMENT_STATUS to RBO_IT_ADMIN;
+grant RBO_LEASE_APPLIC_EDIT to RBO_IT_ADMIN;
+grant RBONOTIFICATION to RBO_IT_ADMIN;
+--grant RBOREPL to RBO_IT_ADMIN;
+--grant RBORSA to RBO_IT_ADMIN;
+
+	-- RBO_AML_AND_CARD_RISK_MNGMT
+grant RBOTELLER to RBO_AML_AND_CARD_RISK_MNGMT;
+grant RBO_KLAC_TELEMARKETING to RBO_AML_AND_CARD_RISK_MNGMT;
+grant RBOCARDORDERS to RBO_AML_AND_CARD_RISK_MNGMT;
+grant RBOMESSAGEATTACHMENTS to RBO_AML_AND_CARD_RISK_MNGMT;
+
+	-- RBO_BANNER_MANAGEMENT
+grant RBO_BANNERS to RBO_BANNER_MANAGEMENT;
+
+	-- RBO_BKU_EXPERT
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_BKU_EXPERT;
+grant RBO_LIFEANDPENSION_VIEW to RBO_BKU_EXPERT;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_BKU_EXPERT;
+grant RBO_PENSION_AGR_VIEW to RBO_BKU_EXPERT;
+grant RBOACCADMINVIEW to RBO_BKU_EXPERT;
+grant RBOAMEXORDERVIEW to RBO_BKU_EXPERT;
+grant RBOAUDITLOG to RBO_BKU_EXPERT;
+grant RBOCARDORDERS to RBO_BKU_EXPERT;
+grant RBOCQVIEW to RBO_BKU_EXPERT;
+grant RBOCUSTOMER to RBO_BKU_EXPERT;
+grant RBOCUSTOMEREDIT to RBO_BKU_EXPERT;
+grant RBODDORDERS to RBO_BKU_EXPERT;
+grant RBODEPOSITORDERS to RBO_BKU_EXPERT;
+grant RBOFFORDERS to RBO_BKU_EXPERT;
+grant RBOORDERS to RBO_BKU_EXPERT;
+grant RBOHELPDESK to RBO_BKU_EXPERT;
+grant RBOINPUTER to RBO_BKU_EXPERT;
+grant RBOMESSAGEATTACHMENTS to RBO_BKU_EXPERT;
+grant RBOMESSAGES to RBO_BKU_EXPERT;
+grant RBOMORTGLOANORDERSEDIT to RBO_BKU_EXPERT;
+grant RBOPAYMENT to RBO_BKU_EXPERT;
+grant RBOPAYMENTVIEW to RBO_BKU_EXPERT;
+grant RBOPRODKITVIEW to RBO_BKU_EXPERT;
+grant RBOSMSAGREEMENTEDIT to RBO_BKU_EXPERT;
+grant RBOSMSAGREEMENTVIEW to RBO_BKU_EXPERT;
+grant RBOSMSMSGVIEW to RBO_BKU_EXPERT;
+grant RBOSTANDINGORDERS to RBO_BKU_EXPERT;
+grant RBOTELLER to RBO_BKU_EXPERT;
+grant RBOUSERMANUALMIGRATION to RBO_BKU_EXPERT;
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_BKU_EXPERT;
+
+	--RBO_CARD_OPS_SPECIALIST
+grant RBOTELLER to RBO_CARD_OPS_SPECIALIST;
+grant RBOCARDOFFICER to RBO_CARD_OPS_SPECIALIST;
+grant RBODEPOSITORDERS to RBO_CARD_OPS_SPECIALIST;
+grant RBOMESSAGEATTACHMENTS to RBO_CARD_OPS_SPECIALIST;
+grant RBO_CREDIT_LIMIT_INCREASE_EDIT to RBO_CARD_OPS_SPECIALIST;
+
+	-- RBO_COMPLIANCE_OFFICER
+grant RBOHELPDESK to RBO_COMPLIANCE_OFFICER;
+grant RBO_DIGITAL_ONB_VIEW to RBO_COMPLIANCE_OFFICER;
+grant RBOFFORDERS to RBO_COMPLIANCE_OFFICER;
+grant RBOCARDORDERS to RBO_COMPLIANCE_OFFICER;
+grant RBOMESSAGES to RBO_COMPLIANCE_OFFICER;
+grant RBOCUSTOMER to RBO_COMPLIANCE_OFFICER;
+grant RBOSMSAGREEMENTVIEW to RBO_COMPLIANCE_OFFICER;
+grant RBOSMSMSGVIEW to RBO_COMPLIANCE_OFFICER;
+grant RBOCQVIEW to RBO_COMPLIANCE_OFFICER;
+
+	--RBO_LENDING_OPS
+grant RBOTELLER to RBO_LENDING_OPS;
+grant RBOMESSAGEATTACHMENTS to RBO_LENDING_OPS;
+grant RBOMORTGLOANORDERSEDIT to RBO_LENDING_OPS;
+
+	-- RBO_CYBERSECURITY
+grant RBO_KLAC_TELEMARKETING to RBO_CYBERSECURITY;
+grant RBOAUDITLOG to RBO_CYBERSECURITY;
+grant RBOCARDORDERS to RBO_CYBERSECURITY;
+grant RBODEPOSITORDERS to RBO_CYBERSECURITY;
+grant RBOMESSAGEATTACHMENTS to RBO_CYBERSECURITY;
+grant RBOSMSAGREEMENTVIEW to RBO_CYBERSECURITY;
+grant RBOCQVIEW to RBO_CYBERSECURITY;
+
+	-- RBO_FI_EXPERT
+grant RBOPAM to RBO_FI_EXPERT;
+grant RBOMESSAGES to RBO_FI_EXPERT;
+grant RBOSMSMSGVIEW to RBO_FI_EXPERT;
+grant RBOPAMORDERSVIEW to RBO_FI_EXPERT;
+grant RBOPAMORDERSEDIT to RBO_FI_EXPERT;
+grant RBOMESSAGEATTACHMENTS to RBO_FI_EXPERT;
+grant RBOCUSTOMER to RBO_FI_EXPERT;
+grant RBOSECORDERSVIEW to RBO_FI_EXPERT;
+grant RBOMARGINORDERSVIEW to RBO_FI_EXPERT;
+grant RBOCUSTODYEDIT to RBO_FI_EXPERT;
+grant RBOCUSTODYVIEW to RBO_FI_EXPERT;
+grant RBO_FI_BO_EDIT to RBO_FI_EXPERT;
+grant RBO_FI_BO_VIEW to RBO_FI_EXPERT;
+
+	-- RBO_FM_BROKER
+grant RBOBROKER to RBO_FM_BROKER;
+grant RBOCUSTOMER to RBO_FM_BROKER;
+grant RBOMESSAGEATTACHMENTS to RBO_FM_BROKER;
+grant RBOPAM to RBO_FM_BROKER;
+grant RBOAUDITLOG to RBO_FM_BROKER;
+
+	-- RBO_FLEX_WORK_EMPLOYEE
+grant RBOFFORDERS to RBO_FLEX_WORK_EMPLOYEE;
+grant RBODEPOSITORDERS to RBO_FLEX_WORK_EMPLOYEE;
+grant RBOMESSAGES to RBO_FLEX_WORK_EMPLOYEE;
+grant RBOMESSAGEATTACHMENTS to RBO_FLEX_WORK_EMPLOYEE;
+grant RBOCUSTOMER to RBO_FLEX_WORK_EMPLOYEE;
+grant RBOSMSMSGVIEW to RBO_FLEX_WORK_EMPLOYEE;
+grant RBOACCADMINEDIT to RBO_FLEX_WORK_EMPLOYEE;
+grant RBOCQVIEW to RBO_FLEX_WORK_EMPLOYEE;
+grant RBO_LIFEANDPENSION_EDIT to RBO_FLEX_WORK_EMPLOYEE;
+
+	-- RBO_IT_USERS_SUPPORT
+grant RBOOFFICERPASSWORD to RBO_IT_USERS_SUPPORT;
+grant RBOOFFICER to RBO_IT_USERS_SUPPORT;
+
+	-- RBO_LENDING_PRODUCTS_DEV
+grant RBO_KLAC_TELEMARKETING to RBO_LENDING_PRODUCTS_DEV;
+grant RBOCARDORDERS to RBO_LENDING_PRODUCTS_DEV;
+grant RBOMESSAGEATTACHMENTS to RBO_LENDING_PRODUCTS_DEV;
+grant RBOTELLER to RBO_LENDING_PRODUCTS_DEV;
+
+	-- RBO_MIDDLE_OFFICE_SPECIALIST
+grant RBOTELLER to RBO_MIDDLE_OFFICE_SPECIALIST;
+grant RBOHELPDESK to RBO_MIDDLE_OFFICE_SPECIALIST;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_MIDDLE_OFFICE_SPECIALIST;
+grant RBOMESSAGEATTACHMENTS to RBO_MIDDLE_OFFICE_SPECIALIST;
+grant RBOUSERMANUALMIGRATION to RBO_MIDDLE_OFFICE_SPECIALIST;
+grant RBOMORTGLOANORDERSEDIT to RBO_MIDDLE_OFFICE_SPECIALIST;
+grant RBO_CREDIT_LIMIT_INCREASE_EDIT to RBO_MIDDLE_OFFICE_SPECIALIST;
+
+	-- RBO_OPERATIONS_EXPERT
+grant RBOTELLER to RBO_OPERATIONS_EXPERT;
+grant RBO_KLAC_TELEMARKETING to RBO_OPERATIONS_EXPERT;
+grant RBOCARDORDERS to RBO_OPERATIONS_EXPERT;
+grant RBONOTE to RBO_OPERATIONS_EXPERT;
+grant RBOMESSAGEATTACHMENTS to RBO_OPERATIONS_EXPERT;
+grant RBO_PENSION_AGR_EDIT to RBO_OPERATIONS_EXPERT;
+
+	-- RBO_PAYMENTS_OPS
+grant RBOPAYMENT to RBO_PAYMENTS_OPS;
+grant RBOOFFICER to RBO_PAYMENTS_OPS;
+
+	-- RBO_DIG_CHANNELS_PROD_OWNER
+grant RBO_CAPF_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_CREDIT_LIMIT_INCREASE_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_DIGITAL_ONB_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_FI_BO_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_LEASE_APPLIC_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_LIFEANDPENSION_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_PENSION_AGR_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_XSMART_BONUS_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOACCADMINVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOAMEXORDERVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOAUDITLOG to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOCQVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOCUSTODYVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOCUSTOMER to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBODDORDERS to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBODEPOSITORDERS to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOHELPDESK to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOMARGINORDERSVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOMORTGLOANORDERSVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOOFFICER to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOORDERS to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOPAMORDERSVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOPAYMENTVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOPRODKITVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOSECORDERSVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOSMSAGREEMENTVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOSMSMSGVIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOSTANDINGORDERS to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOTEMPLATESEDIT to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBO_INSURANCE_ORDERS_VIEW to RBO_DIG_CHANNELS_PROD_OWNER;
+grant RBOCARDORDERS to RBO_DIG_CHANNELS_PROD_OWNER;
+
+	-- RBO_STATE_AUTH_REQ_PROCESSING
+grant RBO_DIGITAL_ONB_VIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOAUDITLOG to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOORDERS to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOPAYMENTVIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBO_MOBILESCAN_DOC_VIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOMESSAGES to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOCUSTOMER to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOSTANDINGORDERS to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBODDORDERS to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBODEPOSITORDERS to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOSMSAGREEMENTVIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOSECORDERSVIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOAMEXORDERVIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOCQVIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOMORTGLOANORDERSVIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBO_XSMART_BONUS_VIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBO_LEASE_APPLIC_VIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+grant RBOACCADMINVIEW to RBO_STATE_AUTH_REQ_PROCESSING;
+
+
+grant select on sys.dba_role_privs to &&ib_owner_name;
+grant select on sys.dba_users to &&ib_owner_name;
+grant select on sys.dba_roles to &&ib_owner_name;
+grant select on sys.v_$session to &&ib_owner_name;
+grant execute on DBMS_LDAP TO &&ib_owner_name;
+GRANT CREATE USER TO &&ib_owner_name;
+
+GRANT SELECT ON &&ib_owner_name..FAX TO RBOFAXVIEW;
+GRANT SELECT ON &&ib_owner_name..FAX_DOCUMENT TO RBOFAXVIEW;
+
+--@ib_stop_jobs.sql
+
+disconnect;
+
+prompt Connecting as IB owner user
+connect &&ib_owner_name/&&ib_owner_passwd@&&ib_instance_name;
+
+--@alter0NN.sql
+--@alter031.sql
+
+@bo_types.sql
+
+@bo_common.sql
+@bo_dflicence.sql
+@bo_faxview4.sql
+@bo_faxfind.sql
+@bo_faxdocfind.sql
+@bo_faxedit4.sql
+@bo_faxdocedit.sql
+@bo_gpas.sql
+--@bo_helpdesk.sql
+@bo_helpdesk.pks
+@bo_helpdesk.pkb
+@bo_sysadmin.sql
+--@bo_customer4.sql
+@bo_customer.pks
+@bo_customer.pkb
+--@bo_findcustomers.sql
+@bo_findcustomers.pks
+@bo_findcustomers.pkb
+@bo_findusers.sql
+@bo_customeredit4.sql
+--@bo_smsagreement.sql
+@bo_smsagreement.pks
+@bo_smsagreement.pkb
+@bo_smsagreementedit.sql
+--@bo_documents.sql
+@bo_documents.pks
+@bo_documents.pkb
+--@bo_pay4.sql
+@bo_payment.pks
+@bo_payment.pkb
+@bo_requestToPay.pks
+@bo_requestToPay.pkb
+                    
+--@bo_ffo.sql
+@bo_ffo.pks
+@bo_ffo.pkb
+@bo_dr.sql
+--@bo_vsaa.sql
+@bo_mloan.sql
+--@bo_auditlog.sql
+@bo_auditlog.pks
+@bo_auditlog.pkb
+@bo_rates.sql
+@bo_message.sql
+@bo_note.sql
+@bo_dd.sql
+@bo_sto.sql
+@bo_smsdoc.sql
+@bo_smsview.sql
+@bo_pamo.sql
+@bo_broker.sql
+@bo_insurance.sql
+@bo_margin.sql
+--@bo_notify.sql
+@bo_cards.sql
+@bo_cq.sql
+@bo_report.sql
+@bo_sms.sql
+--@bo_vsaaadvapp.sql
+--@bo_vsaaadv.sql
+@bo_cru.sql
+@bo_otse.sql
+@bo_messageWA.sql
+@bo_gerdep.pks
+@bo_gerdep.pkb
+@bo_custody.sql
+@bo_accadmin.sql
+@bo_prodkit.sql
+@bo_amexorder.sql
+@bo_credliminc.sql
+@bo_capf.sql
+@bo_lifeandpension.sql
+@bo_crontodoc.sql
+@bo_fiaccopen.sql
+@bo_lease_applications.sql
+@bo_lease_WEB.sql
+
+ALTER PACKAGE bo_template COMPILE;
+
+
+grant execute on BODocuments to RBOPAYMENTVIEW;
+grant execute on BODocuments to RBOORDERS;
+grant execute on BODocuments to RBODepositOrders;
+grant execute on BODocuments to RBOSMSAGREEMENTVIEW;
+grant execute on BODocuments to RBOPamOrdersView;
+grant execute on BODocuments to RBOSecOrdersView;
+grant execute on BODocuments to RBO_INSURANCE_ORDERS_VIEW;
+grant execute on BODocuments to RBOMarginOrdersView;
+grant execute on BODocuments to RBOCQView;
+grant execute on BODocuments to RBOMortgLoanOrdersView;
+grant execute on BODocuments to RBOMessages;
+grant execute on BODocuments to RBOCUSTOMER;
+--grant execute on BODocuments to RBOVSAAApplications;
+--grant execute on BODocuments to RBOVSAAADVICEAPPLICATIONS;
+grant execute on BODocuments to RBORATES;
+grant execute on BODocuments to RBOConfRiskUndertaken;
+grant execute on BODocuments to RBOOTSESIGN;
+grant execute on BODocuments to RBOOTSEAPPROVE;
+grant execute on BODocuments to RBODEPOVIEW;
+grant execute on BODocuments to RBOCUSTODYVIEW;
+grant execute on BODocuments to RBOACCADMINVIEW;
+grant execute on BODocuments to RBOPRODKITVIEW;
+grant execute on BODocuments to RBOAMEXORDERVIEW;
+grant execute on BODocuments to RBO_CREDIT_LIMIT_INCREASE_VIEW;
+grant execute on BODocuments to RBO_LIFEANDPENSION_VIEW;
+grant execute on BODocuments to RBO_CAPF_VIEW;
+grant execute on BODocuments to RBO_PENSION_AGR_VIEW;
+grant execute on BODocuments to RBO_FI_BO_VIEW;
+grant execute on BODocuments to RBO_LEASE_APPLIC_VIEW;
+grant execute on BODocuments to RBO_FINANCE_CONSULTATION_EDIT;
+grant execute on BODocuments to RBO_DIGITAL_ONB_VIEW;
+grant execute on BODocuments to RBO_XSMART_BONUS_VIEW;
+
+grant execute on bocommon to RBOHELPDESK;
+grant execute on bocommon to RBOMAINTENANCE;
+grant execute on bocommon to RBOSYSADMIN;
+grant execute on bocommon to RBOFaxView;
+grant execute on bocommon to RBOFAXASSISTANT;
+grant execute on bocommon to RBOFAXPAYMENT;
+grant execute on bocommon to RBOFAXFFO;
+grant execute on bocommon to RBORATES;
+grant execute on bocommon to RBOOFFICER;
+grant execute on bocommon to RBOCUSTOMER;
+grant execute on bocommon to RBOPAYMENTVIEW;
+grant execute on bocommon to RBOORDERS;
+grant execute on bocommon to RBOAUDITLOG;
+grant execute on bocommon to RBONote;
+grant execute on bocommon to RBOMessages;
+grant execute on bocommon to RBOStandingOrders;
+grant execute on bocommon to RBODDOrders;
+grant execute on bocommon to RBODepositOrders;
+grant execute on bocommon to RBOSMSAGREEMENTVIEW;
+grant execute on bocommon to RBOSMSMSGVIEW;
+grant execute on bocommon to RBOPamOrdersView;
+grant execute on bocommon to RBOSecOrdersView;
+grant execute on bocommon to RBO_INSURANCE_ORDERS_VIEW;
+grant execute on bocommon to RBOMarginOrdersView;
+grant execute on bocommon to RBOCQView;
+grant execute on bocommon to RBOMortgLoanOrdersView;
+--grant execute on bocommon to RBOVSAAAPPLICATIONS;
+--grant execute on bocommon to RBOVSAAADVICES;
+--grant execute on bocommon to RBOVSAAADVICEAPPLICATIONS;
+grant execute on bocommon to RBOConfRiskUndertaken;
+grant execute on bocommon to RBOOTSESIGN;
+grant execute on bocommon to RBOOTSEAPPROVE;
+grant execute on bocommon to RBOMESSAGEATTACHMENTS;
+grant execute on bocommon to RBOCUSTODYVIEW;
+grant execute on bocommon to RBOACCADMINVIEW;
+grant execute on bocommon to RBOPRODKITVIEW;
+grant execute on bocommon to RBOAMEXORDERVIEW;
+grant execute on bocommon to RBO_CREDIT_LIMIT_INCREASE_VIEW;
+grant execute on bocommon to RBO_CAPF_VIEW;
+grant execute on bocommon to RBO_CRONTO_PRINT;
+grant execute on bocommon to RBO_LIFEANDPENSION_VIEW;
+grant execute on bocommon to RBO_PENSION_AGR_VIEW;
+grant execute on bocommon to RBO_FI_BO_VIEW;
+grant execute on bocommon to RBO_OFFICER_PHOTO;
+grant execute on bocommon to RBO_LEASE_APPLIC_VIEW;
+grant execute on bocommon to RBO_FINANCE_CONSULTATION_EDIT;
+grant execute on bocommon to RBO_DIGITAL_ONB_VIEW;
+grant execute on bocommon to RBO_XSMART_BONUS_VIEW;
+grant execute on bocommon to RBO_BANNERS;
+
+grant execute on bosysadmin to RBOOfficer;
+grant execute on bosysadmin to RBO_OFFICER_PHOTO;
+grant execute on BOFaxView to RBOFaxView;
+grant execute on BOFaxView to RBOFaxAssistant;
+grant execute on BOFaxView to RBOTeller;
+grant execute on BOFaxView to RBO_KLAC_IBSERVICE;
+grant execute on BOFaxFind to RBOFaxView;
+grant execute on BOFaxFind to RBOFaxAssistant;
+grant execute on BOFaxFind to RBOTeller;
+grant execute on BOFaxFind to RBO_KLAC_IBSERVICE;
+grant execute on BOFaxDocFind to RBOFaxView;
+grant execute on BOFaxDocFind to RBOFaxAssistant;
+grant execute on BOFaxDocFind to RBOTeller;
+grant execute on BOFaxDocFind to RBO_KLAC_IBSERVICE;
+grant execute on BOFaxEdit to RBOFaxReg;
+grant execute on BOFaxDocEdit to RBOFaxPayment;
+grant execute on BOFaxDocEdit to RBOFaxFFO;
+grant execute on BOFaxDocEdit to RBOFaxKRD;
+grant execute on bohelpdesk to RBOHELPDESK;
+grant execute on bodflicence to RBOMAINTENANCE;
+grant execute on BOReport to RBOMAINTENANCE;
+grant execute on BOPasGen to RBOMAINTENANCE;
+grant execute on BOCustomer to RBOCUSTOMER;
+grant execute on BOFindUsers to RBOCUSTOMER;
+grant execute on BOFindCustomers to RBOCUSTOMER;
+grant execute on BOCustomerEdit to RBOCUSTOMEREDIT;
+grant execute on bo_repl_link to RBOCUSTOMEREDIT;
+grant execute on BOSMSAgreement to RBOCUSTOMER;
+grant execute on BOSMSAgreementEdit to RBOCUSTOMEREDIT;
+grant execute on BOSMSDocument to RBOSMSAGREEMENTVIEW;
+grant execute on BOSMSView to RBOSMSMSGVIEW;
+grant execute on BOSMSAgreementEdit to RBOSMSAGREEMENTEDIT;
+grant execute on BOPayment to RBOPAYMENTVIEW;
+grant execute on BORequestToPay to RBOPAYMENTVIEW;
+grant execute on BOFFO to RBOORDERS;
+grant execute on BOFFO to RBO_FINANCE_CONSULTATION_EDIT;
+grant execute on BOCards to RBOORDERS;
+grant execute on BODR to RBODepositOrders;
+grant execute on BODD to RBODDOrders;
+grant execute on BOSTO to RBOStandingOrders;
+grant execute on bo_template to RBOTemplatesEdit;
+--grant execute on BOVSAA to RBOVSAAAPPLICATIONS;
+grant execute on BOAuditLog to RBOAUDITLOG;
+grant execute on borates to RBORATES;
+grant execute on BOMessage to RBOMessages;
+grant execute on BOSMS to RBOMessages;
+grant execute on BONote to RBONote;
+grant execute on BOPamo to RBOPamOrdersView;
+grant execute on BOBroker to RBOSecOrdersView;
+grant execute on BOInsurance to RBO_INSURANCE_ORDERS_VIEW;
+grant execute on BOMargin to RBOMarginOrdersView;
+grant execute on BOCQ to RBOCQView;
+grant execute on BOMLoan to RBOMortgLoanOrdersView;
+-- grant execute on BOVsaaAdvApp to RBOVSAAADVICEAPPLICATIONS;
+-- grant execute on BOVsaaAdv to RBOVSAAADVICES;
+grant execute on bocru to RBOConfRiskUndertaken;
+grant execute on bo_repl_link to RBOOTSEAPPROVE;
+grant execute on bootse to RBOOTSESIGN;
+grant execute on bootse to RBOOTSEAPPROVE;
+grant execute on bogerdep to RBODEPOEDIT;
+grant execute on bogerdep to RBODEPOVIEW;
+grant execute on bocustody to RBOCUSTODYVIEW;
+grant execute on boaccadmin to RBOACCADMINVIEW;
+grant execute on boprodkit to RBOPRODKITVIEW;
+grant execute on boamexorder to RBOAMEXORDERVIEW;
+grant execute on boamexorder to RBOMORTGLOANORDERSVIEW;
+grant execute on boamexorder to RBO_FINANCE_CONSULTATION_EDIT;
+grant execute on boamexorder to RBO_DIGITAL_ONB_VIEW;
+grant execute on bocredliminc to RBO_CREDIT_LIMIT_INCREASE_VIEW;
+grant execute on bocapf to RBO_CAPF_VIEW;
+grant execute on BOlifeandpension to RBO_LIFEANDPENSION_VIEW;
+grant execute on BOlifeandpension to RBO_PENSION_AGR_VIEW;
+grant execute on bomessageWA to RBOMessageAttachments;
+grant execute on BOCRONTODOC to RBO_MOBILESCAN_DOC_VIEW;
+grant execute on BOFiaccopen to RBO_FI_BO_VIEW;
+grant execute on BOFiaccopen to RBOCUSTODYVIEW;
+grant execute on BOLeaseApplications to RBO_LEASE_APPLIC_VIEW;
+grant execute on BOLeaseWEB to RBO_LEASE_APPLIC_VIEW;
+grant execute on bocards to RBO_XSMART_BONUS_VIEW;
+
+
+
+prompt
+prompt Fin for IB.
+prompt
+
+disconnect;
+
+prompt Connecting as sysdba user
+connect sys/&&ib_sys_passwd@&&ib_instance_name as sysdba;
+
+--@alter030.sql
+--@DIGI_FAX_DIGIFAXREPL.pkb
+
+--@ib_stop_jobs.sql
+--@ib_start_jobs.sql
+
+disconnect;
+
+spool off

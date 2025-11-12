@@ -1,0 +1,1 @@
+sqlplus /nolog @ib_patch.sql
