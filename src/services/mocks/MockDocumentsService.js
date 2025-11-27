@@ -15,21 +15,17 @@ class MockDocumentsService extends MockBaseService {
 
     /**
      * Get document audit history
+     * Returns helpdesk_log_t type
      */
     async getHistory(documentId) {
         console.log(`[MOCK MODE] BODocuments.history(${documentId})`);
 
-        const history = mockDocumentHistory.filter(h => h.DOCUMENT_ID === documentId);
+        // Filter by sessionId or just return all for demo (Oracle would filter by document)
+        const history = mockDocumentHistory;
         console.log(`[MOCK MODE] Returning ${history.length} history entries`);
 
-        return history.map(h => ({
-            ID: h.ID,
-            EVENT_TYPE_ID: h.EVENT_TYPE_ID,
-            TIMESTAMP: h.TIMESTAMP,
-            STATUS: h.STATUS,
-            OFFICER: h.OFFICER,
-            DETAILS: h.DETAILS
-        }));
+        // Return directly - Oracle returns rows matching helpdesk_log_t structure
+        return history;
     }
 
     /**

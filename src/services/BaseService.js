@@ -19,9 +19,11 @@ class BaseService {
                 .map(key => `:${key}`)
                 .join(', ');
 
+            const plsql = `BEGIN ${this.packageName}.${procedureName}(${bindParams}, :P_CURSOR); END;`;
+            console.log(`[DB] Executing: ${plsql}`);
 
             const result = await connection.execute(
-                `BEGIN ${this.packageName}.${procedureName}(${bindParams}, :P_CURSOR); END;`,
+                plsql,
                 binds,
                 {outFormat: oracledb.OUT_FORMAT_OBJECT}
             );
@@ -29,16 +31,28 @@ class BaseService {
             const resultSet = result.outBinds.P_CURSOR;
             const rows = await resultSet.getRows();
             await resultSet.close();
+
+            console.log(`[DB] Success: ${this.packageName}.${procedureName} returned ${rows.length} rows`);
             return rows;
         } catch (err) {
-            console.error(`Error executing ${this.packageName}.${procedureName}:`, err);
-            throw err;
+            console.error(`[DB ERROR] Failed to execute ${this.packageName}.${procedureName}:`);
+            console.error(`[DB ERROR] Message: ${err.message}`);
+            console.error(`[DB ERROR] Code: ${err.code || 'N/A'}`);
+
+            // Create a more user-friendly error
+            const error = new Error(`Database error: ${err.message}`);
+            error.originalError = err;
+            error.package = this.packageName;
+            error.procedure = procedureName;
+            error.code = err.code;
+
+            throw error;
         } finally {
             if (connection) {
                 try {
                     await connection.close();
                 } catch (closeErr) {
-                    console.error('Error closing connection:', closeErr);
+                    console.error('[DB ERROR] Error closing connection:', closeErr);
                 }
             }
         }

@@ -3,31 +3,87 @@ const { mockFFODocuments } = require('./mockData');
 
 class MockFFOService extends MockBaseService {
     constructor() {
-        super('FFO');
+        super('BOFFO');
     }
 
-    async getDocumentsList(classId, status) {
-        console.log(`[MOCK MODE] FFO.getDocumentsList called with classId: ${classId}, status: ${status}`);
-
-        // Filter mock data based on parameters
-        let results = mockFFODocuments;
-
-        if (classId) {
-            results = results.filter(doc => doc.CLASS_ID === classId);
-        }
-
-        if (status) {
-            results = results.filter(doc => doc.STATUS === status);
-        }
-
-        console.log(`[MOCK MODE] Returning ${results.length} documents`);
-        return results;
-    }
-
-    async getAllDocuments() {
-        console.log('[MOCK MODE] FFO.getAllDocuments called');
-        console.log(`[MOCK MODE] Returning ${mockFFODocuments.length} documents`);
+    async findMy() {
+        console.log(`[MOCK MODE] BOFFO.find_my() called`);
+        console.log(`[MOCK MODE] Returning ${mockFFODocuments.length} FFO documents`);
         return mockFFODocuments;
+    }
+
+    async getById(documentId) {
+        console.log(`[MOCK MODE] Getting FFO document by ID: ${documentId}`);
+        const doc = mockFFODocuments.find(d => d.ID == documentId);
+        return doc || null;
+    }
+
+    async getCategories() {
+        console.log(`[MOCK MODE] BOFFO.get_categories() called`);
+        // Mock categories
+        return [
+            {
+                ID: 201,
+                NAME: 'Currency Exchange',
+                PARENT_ID: null
+            },
+            {
+                ID: 202,
+                NAME: 'General Inquiry',
+                PARENT_ID: null
+            },
+            {
+                ID: 301,
+                NAME: 'EUR to USD',
+                PARENT_ID: 201
+            },
+            {
+                ID: 302,
+                NAME: 'EUR to GBP',
+                PARENT_ID: 201
+            },
+            {
+                ID: 303,
+                NAME: 'Payment Information',
+                PARENT_ID: 202
+            }
+        ];
+    }
+
+    async categorize(docId, categoryId, subCategoryId, assignee) {
+        console.log(`[MOCK MODE] BOFFO.categorize(${docId}, ${categoryId}, ${subCategoryId}, ${assignee})`);
+
+        const doc = mockFFODocuments.find(d => d.ID == docId);
+        if (doc) {
+            doc.CATEGORY_ID = categoryId;
+            doc.SUBCATEGORY_ID = subCategoryId;
+            doc.ASSIGNEE = assignee;
+        }
+
+        return {
+            success: true,
+            documentId: docId,
+            categoryId,
+            subCategoryId,
+            assignee,
+            result: 0
+        };
+    }
+
+    async setProcessing(docId, reason, newStatus, messageId) {
+        console.log(`[MOCK MODE] BOFFO.set_processing(${docId}, ${reason}, ${newStatus}, ${messageId})`);
+
+        const doc = mockFFODocuments.find(d => d.ID == docId);
+        if (doc) {
+            doc.STATUS_ID = newStatus;
+        }
+
+        return {
+            success: true,
+            documentId: docId,
+            newStatus,
+            result: 0
+        };
     }
 }
 

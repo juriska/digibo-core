@@ -13,7 +13,8 @@
     "docker:oracle": "docker-compose --profile oracle-local up -d",
     "docker:oracle:down": "docker-compose --profile oracle-local down -v",
     "dev:mock": "cp .env.mock .env && npm run dev",
-    "dev:local-db": "cp .env.local-db .env && npm run dev"
+    "dev:local-db": "cp .env.local-db .env && npm run dev",
+    "dev:db": "cp .env.dev-db .env && npm run dev"
   },
   "dependencies": {
     "cors": "^2.8.5",

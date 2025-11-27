@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { createPool } = require('./config/database');
+const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 require('dotenv').config();
 const app = express();
 
@@ -14,6 +15,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+// Enable strict routing to avoid trailing slash issues
+app.set('strict routing', false);
 
 const port = process.env.PORT || 3000;
 const mockEnabled = process.env.MOCK_ENABLED === 'true';
@@ -29,7 +33,7 @@ async function init() {
   try {
     if (!mockEnabled) {
       console.log('Initializing database connection...');
-      //await createPool();
+      await createPool();
       console.log('Database connection initialized successfully');
     }
 
@@ -44,8 +48,15 @@ async function init() {
       res.send('✅ API Gateway is up and running');
     });
 
+    // 404 handler (must be after all routes)
+    app.use(notFoundHandler);
+
+    // Global error handler (must be last)
+    app.use(errorHandler);
+
     app.listen(port, () => {
       console.log(`API Gateway listening on port ${port}`);
+      console.log(`Mock mode: ${mockEnabled ? 'ENABLED' : 'DISABLED'}`);
     });
   } catch (error) {
     console.error('Failed to initialize application:', error);
@@ -53,7 +64,38 @@ async function init() {
   }
 }
 
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[PROCESS] Unhandled Promise Rejection:');
+  console.error('[PROCESS] Reason:', reason);
+  console.error('[PROCESS] Promise:', promise);
+  // Don't exit the process, just log the error
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('[PROCESS] Uncaught Exception:');
+  console.error('[PROCESS] Error:', error.message);
+  console.error('[PROCESS] Stack:', error.stack);
+  // Don't exit the process for most errors
+  if (error.code === 'EADDRINUSE') {
+    console.error('[PROCESS] Port already in use, exiting...');
+    process.exit(1);
+  }
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('[PROCESS] SIGTERM received, shutting down gracefully...');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('[PROCESS] SIGINT received, shutting down gracefully...');
+  process.exit(0);
+});
+
 init().catch(error => {
-  console.error('Unhandled error during initialization:', error);
+  console.error('[INIT] Unhandled error during initialization:', error);
   process.exit(1);
 });

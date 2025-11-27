@@ -3,7 +3,9 @@
     "allow": [
       "Bash(test:*)",
       "Bash(curl:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(pkill:*)",
+      "Read(//private/tmp/**)"
     ],
     "deny": [],
     "ask": []

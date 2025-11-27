@@ -3,22 +3,15 @@ const { mockPaymentDocuments } = require('./mockData');
 
 class MockPaymentService extends MockBaseService {
     constructor() {
-        super('DocumentsPackage');
+        super('BOPayment');
     }
 
     async getDocumentsList(classId, user) {
-        console.log(`[MOCK MODE] Payment.getDocumentsList called with classId: ${classId}, user: ${user}`);
+        console.log(`[MOCK MODE] BOPayment.find (not fully implemented)`);
 
-        // Filter mock data based on parameters
-        let results = mockPaymentDocuments;
-
-        if (classId) {
-            results = results.filter(doc => doc.CLASS_ID === classId);
-        }
-
-        if (user) {
-            results = results.filter(doc => doc.USER === user);
-        }
+        // Return mock data matching payment_t structure
+        // Note: BOPayment.find() requires many parameters - this is simplified
+        const results = mockPaymentDocuments;
 
         console.log(`[MOCK MODE] Returning ${results.length} payment documents`);
         return results;
