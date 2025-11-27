@@ -399,8 +399,8 @@ begin
 			5, c.name.extra_3,
 			c.name.name_en
 		)), c.name.name_en) from ffo_categories c where c.id = p.ffo_subcategory_id) subcategory_name,
-        p.ffo_assignee assignee,
-	(select max(nvl(is_type_visible, 0)) from document_attachments da where da.document_id = p.id) document_attached
+        p.ffo_assigne
+	(select max(nvl(is_type_visible, 0))
 
 	from documents p
 	where rownum <= bocommon.ResultSetSize
