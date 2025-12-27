@@ -28,6 +28,8 @@ const paymentRoutes = require('./routes/payments.routes');
 const bodiRoutes = require('./routes/bodi.routes');
 const appRoutes = require('./routes/app.routes');
 const documentsRoutes = require('./routes/documents.routes');
+const customerRoutes = require('./routes/customer.routes');
+const auditlogRoutes = require('./routes/auditlog.routes');
 
 async function init() {
   try {
@@ -41,6 +43,8 @@ async function init() {
     app.use('/api/ffo', ffoRoutes);
     app.use('/api/payments', paymentRoutes);
     app.use('/api/documents', documentsRoutes);
+    app.use('/api/customer', customerRoutes);
+    app.use('/api/auditlog', auditlogRoutes);
     app.use('/bodi', bodiRoutes);
     app.use('/api/app', appRoutes);
 

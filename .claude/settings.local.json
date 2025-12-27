@@ -1,11 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(test:*)",
+      "Bash(xargs kill -9)",
+      "Bash(PORT=3001 MOCK_ENABLED=true node:*)",
       "Bash(curl:*)",
-      "Bash(lsof:*)",
-      "Bash(pkill:*)",
-      "Read(//private/tmp/**)"
+      "Bash(node -c:*)",
+      "Bash(node:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
